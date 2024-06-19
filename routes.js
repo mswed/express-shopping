@@ -1,7 +1,7 @@
 const express = require('express');
 const router = new express.Router();
 const items = require('./fakeDb');
-const {getItem} = require('./utils');
+const {getItem, ExpressError} = require('./utils');
 
 
 // Get all items
@@ -10,11 +10,17 @@ router.get('/', (req, res) => {
 })
 
 // Create a new item
-router.post('/', (req, res) => {
-    const newItem = req.body;
-    items.push(newItem);
+router.post('/', (req, res, next) => {
+    try {
+        const newItem = req.body;
+        if (items.find( i => i.name === newItem.name)) throw new ExpressError('Item already in list', 400);
+        items.push(newItem);
 
-    res.json({added: newItem})
+        return res.json({added: newItem})
+    } catch (e) {
+        console.log(e)
+        return next(e)
+    }
 
 })
 

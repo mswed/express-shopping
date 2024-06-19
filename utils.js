@@ -1,10 +1,27 @@
 const items = require("./fakeDb");
 
-function getItem(req, res, next) {
-    const itemName = req.params.name;
-    res.locals.item = items.find(i => itemName === i.name);
-
-    next();
+class ExpressError extends Error {
+    constructor(msg, status) {
+        super();
+        this.msg = msg;
+        this.status = status;
+        console.log(this.stack);
+    }
 }
 
-module.exports = {getItem}
+function getItem(req, res, next) {
+    try {
+        const itemName = req.params.name;
+        res.locals.item = items.find(i => itemName === i.name);
+        if (!res.locals.item) throw new ExpressError('Item not found', 404)
+
+        next();
+    } catch (e) {
+        next(e)
+    }
+
+}
+
+
+
+module.exports = {getItem, ExpressError}
