@@ -16,7 +16,7 @@ router.post('/', (req, res, next) => {
         if (items.find( i => i.name === newItem.name)) throw new ExpressError('Item already in list', 400);
         items.push(newItem);
 
-        return res.json({added: newItem})
+        return res.status(201).json({added: newItem})
     } catch (e) {
         console.log(e)
         return next(e)
@@ -34,14 +34,14 @@ router.patch('/:name', getItem, (req, res) => {
     res.locals.item.name = req.body.name;
     res.locals.item.price = req.body.price;
 
-    res.json({updated: res.locals.item})
+    res.status(200).json({updated: res.locals.item})
 })
 
 // Delete an item
 router.delete('/:name', getItem, (req, res) => {
     items.splice(res.locals.item, 1);
 
-    res.json({message: 'deleted'})
+    res.status(200).json({message: 'deleted'})
 
 
 
