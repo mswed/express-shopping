@@ -1,6 +1,7 @@
 const express = require('express');
 const router = new express.Router();
 const items = require('./fakeDb');
+const {getItem} = require('./utils');
 
 
 // Get all items
@@ -18,28 +19,21 @@ router.post('/', (req, res) => {
 })
 
 // Get item by name
-router.get('/:name', (req, res) => {
-    const itemName = req.params.name;
-    const item = items.find(i => itemName === i.name)
-
-    res.json(item);
+router.get('/:name', getItem, (req, res) => {
+    res.json(res.locals.item);
 })
 
 // Modify an item
-router.patch('/:name', (req, res) => {
-    const itemName = req.params.name;
-    let item = items.find(i => itemName === i.name);
-    item.name = req.body.name;
-    item.price = req.body.price;
+router.patch('/:name', getItem, (req, res) => {
+    res.locals.item.name = req.body.name;
+    res.locals.item.price = req.body.price;
 
-    res.json({updated: item})
+    res.json({updated: res.locals.item})
 })
 
 // Delete an item
-router.delete('/:name', (req, res) => {
-    const itemName = req.params.name;
-    const item = items.find(i => itemName === i.name);
-    items.splice(item, 1);
+router.delete('/:name', getItem, (req, res) => {
+    items.splice(res.locals.item, 1);
 
     res.json({message: 'deleted'})
 
