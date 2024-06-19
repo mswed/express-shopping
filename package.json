@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "name": "express-shopping",
+  "version": "1.0.0",
+  "description": "A shopping list!",
+  "main": "server.js",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Moshe Swed",
+  "license": "ISC"
+}
